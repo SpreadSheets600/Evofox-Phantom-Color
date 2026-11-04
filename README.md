@@ -4,6 +4,8 @@
 
 This is a small python script that can be used to toggle LED modes of an Amkette Evofox Phantom Gaming mouse.
 
+https://github.com/user-attachments/assets/acca0d2a-3564-4e87-ab82-af991ddd2b97
+
 I wrote this because the configuration tool that shipped with the mouse was only available (in binary form) for Microsoft Windows. Also it did not had the option to keep a constant color on the mouse. This script allows you to set a constant color on the mouse, and also to toggle between different colors.
 
 The `.exe` release of this script is available in the [releases](https://github.com/SpreadSheets600/Evofox-Phantom-Color/releases)
