@@ -1,0 +1,3 @@
+# Let the logged-in user talk to the INSTANT USB Gaming Mouse (30fa:1440)
+# without sudo. Installed by `make install-udev`.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="30fa", ATTRS{idProduct}=="1440", TAG+="uaccess"
