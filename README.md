@@ -8,33 +8,9 @@ I wrote this because the configuration tool that shipped with the mouse was only
 
 The `.exe` release of this script is available in the [releases](https://github.com/SpreadSheets600/Evofox-Phantom-Color/releases)
 
-```bash
-python efp-color.py
+<img width="941" height="436" alt="dms_capture_1793814383315" src="https://github.com/user-attachments/assets/2be70233-7fa1-4505-b71d-72c7cf0eaefb" />
 
-  ╭────────────────────────────────────────────╮
-  │  ◆  EFP COLORS                             │
-  │  30fa:1440 · Static Color                  │
-  ╰────────────────────────────────────────────╯
-
-  Now            white
-
-  1    red        2    green      3    blue
-  4    cyan       5    yellow     6    magenta
-  7    purple     8    white      9    off
-
-  c Custom ( R,G,B or Hex )    q Quit
-
-  Pick A Color To Apply It
-
-  ❯ 1
-
-  Applying      ...  ( Takes A Few Seconds )
-
-  ✓  Done
-
-```
-
-> ![note]
+> [!NOTE]
 > Based on your permissions, you may need to run this script with `sudo` or add a udev rule for the mouse. Or if you are on windows then you might need to run the script as administrator.
 
 Phantom supports four modes: off, static, slow and fast. This program,
@@ -194,4 +170,4 @@ of choice.
 
 ### Credits
 
-Original script by [@bojle](https://github.com/bojle/evofox-phantom)
+> Original script by [@bojle](https://github.com/bojle/evofox-phantom)
