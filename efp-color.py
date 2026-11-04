@@ -30,9 +30,9 @@ here = os.path.dirname(os.path.realpath(__file__))
 bundle = getattr(sys, "_MEIPASS", here)
 
 PROFILES = [
-    os.path.join(bundle, "anko-1440-profile.hex"),
-    os.path.join(here, "anko-1440-profile.hex"),
-    "/usr/local/share/evofox-phantom/anko-1440-profile.hex",
+    os.path.join(bundle, "efp-1440-profile.hex"),
+    os.path.join(here, "efp-1440-profile.hex"),
+    "/usr/local/share/evofox-phantom/efp-1440-profile.hex",
 ]
 
 # Terminal Styling ( Plain Text When Output Is Not A Terminal )
@@ -83,7 +83,7 @@ def load_profile():
                     if l.strip() and not l.startswith("#")
                 ]
 
-    sys.exit("Profile File ( anko-1440-profile.hex ) Not Found")
+    sys.exit("Profile File ( efp-1440-profile.hex ) Not Found")
 
 
 def parse_color(s):
@@ -217,7 +217,7 @@ def draw(current, status):
     print(paint("  ╭" + "─" * width + "╮", ACCENT))
     print(
         paint("  │", ACCENT)
-        + paint("  ◆  ANKO RGB MOUSE".ljust(width), bold=True)
+        + paint("  ◆  EFP COLORS".ljust(width), bold=True)
         + paint("│", ACCENT)
     )
     print(

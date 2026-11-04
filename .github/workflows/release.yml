@@ -1,40 +1,68 @@
-name: build-windows-exe
+name: build-and-release
 
-# Builds a standalone anko-color.exe (no Python needed on the user's PC).
-# Run it from the Actions tab ("Run workflow"), or push a tag like v0.1.0 to
-# also attach the .exe to a GitHub release.
 on:
   workflow_dispatch:
+  pull_request:
   push:
     tags: ["v*"]
 
-permissions:
-  contents: write
-
 jobs:
-  exe:
-    runs-on: windows-latest
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04 
+            sep: ":"
+            built: efp-color
+            asset: efp-color-linux-x86_64
+          - os: windows-latest
+            sep: ";"
+            built: efp-color.exe
+            asset: efp-color-windows-x86_64.exe
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install system libraries (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libudev-dev libusb-1.0-0-dev
       - name: Install build dependencies
         run: pip install hidapi pyinstaller
-      - name: Build anko-color.exe
+      - name: Build ${{ matrix.built }}
         run: >
-          pyinstaller --onefile --name anko-color
-          --add-data "anko-mouse.py;."
-          --add-data "anko-1440-profile.hex;."
-          anko-color.py
+          pyinstaller --onefile --name efp-color
+          --add-data "efp-1440-profile.hex${{ matrix.sep }}."
+          efp-color.py
       - name: Smoke test (no mouse needed)
-        run: dist\anko-color.exe --dry-run red
+        run: ./dist/${{ matrix.built }} --dry-run red
+      - name: Name the binary
+        run: mv "dist/${{ matrix.built }}" "dist/${{ matrix.asset }}"
       - uses: actions/upload-artifact@v4
         with:
-          name: anko-color-windows
-          path: dist/anko-color.exe
-      - name: Attach to release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
+          name: ${{ matrix.asset }}
+          path: dist/${{ matrix.asset }}
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
         with:
-          files: dist/anko-color.exe
+          path: assets
+          merge-multiple: true
+      - name: Checksums
+        working-directory: assets
+        run: sha256sum efp-color-* > SHA256SUMS.txt
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: assets/*

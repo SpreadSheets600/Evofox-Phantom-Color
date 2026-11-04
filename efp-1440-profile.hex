@@ -1,6 +1,6 @@
 # Settings-table write sequence captured from the vendor app for USB 30fa:1440
 # (OpenRGB issue #3551). One 8-byte feature report (report ID 7) per line.
-# Byte 0x1c of the table (LED mode/speed) is patched by anko-color.py.
+# Byte 0x1c of the table (LED mode/speed) is patched by efp-color.py.
 0718030001002300
 0718090001000000
 0718000001000000
