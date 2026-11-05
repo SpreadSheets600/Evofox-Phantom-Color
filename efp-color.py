@@ -116,17 +116,38 @@ def encode(rgb):
     return {G_ADDR: f(g), R_ADDR: f(r), B_ADDR: f(b), LED_MODE_ADDR: STATIC_MODE}
 
 
+def is_write(c):
+    return c[1] == 0x18 and c[2] == 0x03
+
+
+def is_commit(c):
+    return c[1] == 0x18 and c[2] in (0x00, 0x09)
+
+
+def table_addr(c):
+    return (c[5] << 8) | (c[4] + c[3])
+
+
 def patch(cmds, patches):
+    # Only The Table Bytes Were Sent.
+    # Mouse Keeps It's Own Settings Intact.
+    rows = {(a & 0xF8, a >> 8) for a in patches}
+
     out = []
     seen = set()
 
     for c in cmds:
-        if c[1] == 0x18 and c[2] == 0x03 and c[7] == 0x07:
-            addr = (c[5] << 8) | (c[4] + c[3])
+        if is_write(c):
+            addr = table_addr(c)
 
-            if addr in patches:
-                c = c[:6] + bytes([patches[addr]]) + c[7:]
-                seen.add(addr)
+            if addr not in patches:
+                continue
+
+            c = c[:6] + bytes([patches[addr]]) + c[7:]
+            seen.add(addr)
+
+        elif is_commit(c) and (c[4], c[5]) not in rows and (c[4], c[5]) != (0, 0):
+            continue
 
         out.append(c)
 
