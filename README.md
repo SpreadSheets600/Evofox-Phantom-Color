@@ -4,7 +4,7 @@
 
 This is a small python script that can be used to toggle LED modes of an Amkette Evofox Phantom Gaming mouse.
 
-https://github.com/user-attachments/assets/acca0d2a-3564-4e87-ab82-af991ddd2b97
+<https://github.com/user-attachments/assets/acca0d2a-3564-4e87-ab82-af991ddd2b97>
 
 I wrote this because the configuration tool that shipped with the mouse was only available (in binary form) for Microsoft Windows. Also it did not had the option to keep a constant color on the mouse. This script allows you to set a constant color on the mouse, and also to toggle between different colors.
 
@@ -119,6 +119,8 @@ How this was worked out: the vendor app's USB capture attached to [OpenRGB issue
 on a real 30fa:1440 mouse.
 
 **Transport.** Two HID interfaces: 0 is a plain boot mouse (report ID 1), 1 carries keyboard/consumer collections plus vendor pages. Settings are sent as 8-byte HID *feature* reports with report ID 7 on interface 1 (vendor usage page `0xFF01`), not as output reports like the Evofox Phantom. On Linux interface 1 is a single hidraw node; Windows exposes each collection separately, so the tool prefers the `0xFF01` one.
+
+**Partial writes.** Earlier versions replayed the whole captured table, which overwrote every stored setting. The current tool sends only the packets for the colour and mode bytes plus the commits for their rows. This is based on the captured packet order and has not been checked against a device that keeps other settings, so confirm your button and DPI settings survive an apply.
 
 **Writing the settings table.**
 
